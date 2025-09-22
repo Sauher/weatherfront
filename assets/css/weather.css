@@ -1,0 +1,30 @@
+header{
+    padding: 30px;
+    text-align: center;
+}
+.title{
+    font-weight: bolder;
+}
+.subtitle{
+    font-style: italic;
+}
+#themebtns{
+    position: absolute;
+    top:0;
+    right:0;
+    padding: 10px;
+    font-size: larger;
+}
+.hide{
+    display: none;
+}
+main{
+    text-align: center;
+    padding: 20px 0;
+}
+footer{
+    text-align: center;
+}
+.kozep{
+    margin: 0 auto;
+}

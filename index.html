@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Időjárás App</title>
+    <link rel="stylesheet" href="/assets/css/weather.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.rtl.min.css">
+    
+</head>
+<body>
+    <header>
+        <h1 class="title">Időjárás App</h1>
+        <h5 class="subtitle">By: Schauer Olivér</h3>
+        <div id="themebtns">
+            <i class="bi bi-sun-fill" id="lightmodeBtn"></i>
+            <i class="bi bi-moon-fill" id="darkmodeBtn"></i>
+        </div> 
+    </header>
+    <nav>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Menü</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav" id="loggedOutMenu">
+                  <li class="nav-item" id="loginitem">
+                    <a class="nav-link" onclick="Render('login')" >Belépés</a>
+                  </li>
+                  <li class="nav-item" id="registeritem">
+                    <a class="nav-link hide" onclick="Render('registration')" >Regisztráció</a>
+                  </li>
+
+                </ul>
+                <ul class="navbar-nav" id="loggedInMenu">
+                  <li class="nav-item" id="inmenu1">
+                    <a class="nav-link" onclick="Render('weatherdata')">Időjárás jelzés</a>
+                  </li>
+                  <li class="nav-item" id="inmenu2">
+                    <a class="nav-link" onclick="Logout()" href="#">Kilépés</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </nav>
+    <main>
+        <!-- Dinamikus tartalom feltöltés -->
+    </main>
+    <footer>
+        <h5>Bajai SZC Türr István technikum 13.A Szoft</h5>
+        <h6>2025</h6>
+    </footer>
+
+    <!-- Assetek -->
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/weather.js"></script>
+
+    <!-- Controllerek -->
+    <script src="/controllers/userControl.js"></script>
+</body>
+</html>
