@@ -25,9 +25,9 @@ async function Login() {
                 password: pass
             })
         })
-        ShowAlert("Sikeres belépés!","alert-success")
+       
         user = await res.json()
-
+        ShowAlert("Sikeres belépés!","alert-success")
         if(user.id != undefined){
             loggedUser = user;
 
@@ -58,15 +58,19 @@ async function Register() {
 
     if(pass.value == '' || name.value == '' || emaildat.value == '' || confirmpass.value == ""){
         ShowAlert("Nem adtál meg minden információt!", "alert-danger")
+        return
     }
     if(!passRegExp.test(pass.value)){
         ShowAlert("A megadott jelszó nem elég biztonságos!","alert-danger")
+        return
     }
     if(!emailRegExp.test(emaildat.value)){
         ShowAlert("A megadott email cím nem megfelelő formátumú!", "alert-danger")
+        return
     }
     if(pass.value != confirmpass.value){
         ShowAlert("A megadott jelszavak nem egyeznek!", "alert-danger")
+        return
     }
 
     try {
