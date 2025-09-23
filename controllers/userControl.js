@@ -111,6 +111,108 @@ function Logout(){
     getLoggedUser()
     Render('login')
 }
+async function GetUserData(){
+    let name = document.getElementById("nameField")
+    let emaildat = document.getElementById("emailField")
+
+    try{
+        const res = await fetch(`${API}/users/${loggedUser.id}`)
+        const data = await res.json()
+
+        name.value = data.name
+        emaildat.value = data.email
+    }
+    catch(err){
+        console.log("Hiba!", err)
+    }
+}
+
+async function UpdateUser(){
+    let name = document.getElementById("nameField")
+    let emaildat = document.getElementById("emailField")
+
+    if(!emailRegExp.test(emaildat.value)){
+        ShowAlert("A megadott email cím nem megfelelő formátumú!", "alert-danger")
+        return
+    }
+    try{
+        const res = await fetch(`${API}/users/${loggedUser.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+    
+            },
+            body: JSON.stringify({
+                id: loggedUser.id,
+                name: name.value,
+                email: String(emaildat.value),
+            })
+        })
+
+
+        const data = await res.json()
+
+        if(String(data.msg) == "bademail"){
+            ShowAlert("A megadott email cím már foglalt!","alert-danger")
+            return
+        }
+        if(res.status == 200){
+            ShowAlert(data.msg,"alert-success")
+        }
+
+    }
+    catch(err){
+        console.log("Hiba!", err)
+    }
+    
+}
+async function UpdatePassword(){
+    let oldpass = document.getElementById("oldpassField")
+    let newpass = document.getElementById("newpassField")
+    let confirmpass = document.getElementById("confirmpassField")
+
+    if(oldpass.value == '' || newpass.value == '' || confirmpass.value == ""){
+        ShowAlert("Nem adtál meg minden információt!", "alert-danger")
+        return
+    }
+    if(!passRegExp.test(newpass.value)){
+        ShowAlert("A megadott jelszó nem elég biztonságos!","alert-danger")
+        return
+    }
+    if(newpass.value != confirmpass.value){
+        ShowAlert("A megadott jelszavak nem egyeznek!", "alert-danger")
+        return
+    }
+    if(oldpass.value != loggedUser.password){
+        ShowAlert("A régi jelszavad nem egyezik!", "alert-danger")
+        return
+    }
+    try{
+    const res = await fetch(`${API}/users/${loggedUser.id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+
+        },
+        body: JSON.stringify({
+            id: loggedUser.id,
+            password: newpass.value
+        })
+    })
+
+
+
+    const data = await res.json()
+    if(res.status == 200){
+        ShowAlert(data.msg,"alert-success")
+        confirmpass.value = ''
+        oldpass.value = ''
+        newpass.value = ''
+    }}
+    catch(err){
+        console.log("Hiba!", err)
+    }
+}
 
 function ShowAlert(msg , msg_type){
     let alertDiv = document.getElementById("alertDiv")

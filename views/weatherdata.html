@@ -4,7 +4,36 @@
 <div class="alert hide" id="alertDiv" role="alert"></div>
 
 
-  
 
-</div>  
-<hr>    
+    <div class="form-floating mb-3 ">
+        <input type="number" min="-20" max="50" class="form-control" id="mindegreeField">
+        <label for="mindegreeField">Minimum Hőmérséklet</label>
+    </div>
+
+    <div class="form-floating mb-3 ">
+        <input type="number" min="-20" max="50" class="form-control" id="maxdegreeField">
+        <label for="maxdegreeField">Maximum Hőmérséklet</label>
+    </div>
+
+    <div class="form-floating mb-3 ">
+        <input type="date" class="form-control" id="dateField">
+        <label for="dateField">Dátum</label>
+    </div>
+    <div class="form-floating mb-3">
+        <select class="form-select" id="typeSelect">
+          <option selected>Válassz időjárás típust.</option>
+          <option value="rain">Eső</option>
+          <option value="storm">Zivatar</option>
+          <option value="fog">Köd</option>
+          <option value="sunny">Napsütés</option>
+          <option value="snow">Hóesés</option>
+          <option value="cloudy">Felhős</option>
+        </select>
+        <label for="typeSelect">Időjárás típusa</label>
+      </div>
+
+      <button class="btn btn-primary mb-3 col-4 kozep" id="weatherBtn" onclick="PostWeather()">Hozzáad</button>
+</div> 
+<hr>
+<div id="chartContainer" style="height: 370px; width: 100%; position: relative"></div> 
+<hr>   

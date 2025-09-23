@@ -39,6 +39,12 @@
                   <li class="nav-item" id="inmenu1">
                     <a class="nav-link" onclick="Render('weatherdata')">Időjárás jelzés</a>
                   </li>
+                  <li class="nav-item" id="inmenu4">
+                    <a class="nav-link" onclick="Render('userdata')">Naptár</a>
+                  </li>
+                  <li class="nav-item" id="inmenu3">
+                    <a class="nav-link" onclick="Render('userdata')">Profil</a>
+                  </li>
                   <li class="nav-item" id="inmenu2">
                     <a class="nav-link" onclick="Logout()" href="#">Kilépés</a>
                   </li>
@@ -55,11 +61,18 @@
         <h6>2025</h6>
     </footer>
 
+
+     <!-- Controllerek -->
+     <script src="/controllers/userControl.js"></script>
+     <script src="/controllers/weatherControl.js"></script>
+     <script src="/controllers/chartControl.js"></script>
+
     <!-- Assetek -->
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/weather.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>  
+    <script src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
 
-    <!-- Controllerek -->
-    <script src="/controllers/userControl.js"></script>
+   
 </body>
 </html>
