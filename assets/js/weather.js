@@ -1,3 +1,4 @@
+let theme = "light"
 let darkmodeBtn = document.getElementById("darkmodeBtn")
 let lightmodeBtn = document.getElementById("lightmodeBtn")
 let loggedOutMenu2 = document.getElementById("registeritem")
@@ -14,10 +15,12 @@ Render('registration')
 darkmodeBtn.addEventListener('click', ()=>{
     saveTheme("dark")
     setTheme("dark")
+    InitChart("dark")
 })
 lightmodeBtn.addEventListener('click', ()=>{
     saveTheme("light")
     setTheme("light")
+    InitChart("light")
 })
 
 function setTheme(theme){
@@ -53,7 +56,7 @@ async function Render(view){
             break
         case 'weatherdata':
             await SetDate()
-            await InitChart()
+            await InitChart(theme)
             break
     }
 }

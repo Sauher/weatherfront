@@ -32,10 +32,10 @@ async function PostWeather() {
         })
         const data = await res.json()
         if(res.status == 200){
-            pass.value = ''
-            confirmpass.value = ''
-            emaildat.value = ''
-            name.value = ''
+            typeSelect.value = ''
+            dateField.value = ''
+            mindegreeField = ''
+            maxdegreeField = ''
             ShowAlert(data.msg,"alert-success")
         }
     }
