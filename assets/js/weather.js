@@ -7,6 +7,7 @@ let loggedInMenu2 = document.getElementById("inmenu2")
 let loggedInMenu = document.getElementById("inmenu1")
 let loggedInMenu3 = document.getElementById("inmenu3")
 let loggedInMenu4 = document.getElementById("inmenu4")
+let loggedInMenu5 = document.getElementById("inmenu5")
 
 let main = document.querySelector("main")
 
@@ -56,8 +57,14 @@ async function Render(view){
             break
         case 'weatherdata':
             await SetDate()
+            await loadTable()
+            break
+        case 'chart':
             await InitChart(theme)
             break
+        case 'calendar':
+            await getCalendarData()
+            await initCalendar()
     }
 }
 async function getLoggedUser(){
@@ -69,6 +76,7 @@ async function getLoggedUser(){
         loggedInMenu.classList.remove("hide")
         loggedInMenu3.classList.remove("hide")
         loggedInMenu4.classList.remove("hide")
+        loggedInMenu5.classList.remove("hide")
         await Render('weatherdata')
     }
     else{
@@ -79,6 +87,7 @@ async function getLoggedUser(){
         loggedInMenu3.classList.add("hide")
         loggedInMenu4.classList.add("hide")
         loggedInMenu.classList.add("hide")
+        loggedInMenu5.classList.add("hide")
         await Render('login')
     }
     return loggedUser

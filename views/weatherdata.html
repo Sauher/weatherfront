@@ -22,18 +22,39 @@
     <div class="form-floating mb-3">
         <select class="form-select" id="typeSelect">
           <option selected>Válassz időjárás típust.</option>
-          <option value="rain">Eső</option>
+          <option value="rainy">Eső</option>
           <option value="storm">Zivatar</option>
-          <option value="fog">Köd</option>
+          <option value="foggy">Köd</option>
           <option value="sunny">Napsütés</option>
-          <option value="snow">Hóesés</option>
+          <option value="snowy">Hóesés</option>
           <option value="cloudy">Felhős</option>
         </select>
         <label for="typeSelect">Időjárás típusa</label>
       </div>
 
-      <button class="btn btn-primary mb-3 col-4 kozep" id="weatherBtn" onclick="PostWeather()">Hozzáad</button>
-</div> 
+    <button class="btn btn-primary mb-3 col-4 kozep" id="addBtn" onclick="PostWeather()">Hozzáad</button>
+    <button class="btn btn-warning mb-3 col-4 kozep d-none" onclick="Update()" id="updBtn">Módosítás</button>
+    <button class="btn btn-danger mb-3 col-4 kozep d-none" onclick="Del()" id="delBtn">Törlés</button>
+    <button class="btn btn-primary mb-3 col-4 kozep d-none" onclick="Cancel()" id="cancelBtn">Mégsem</button>
+</div>
 <hr>
-<div id="chartContainer" style="height: 370px; width: 100%; position: relative"></div> 
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+          <th class="text-center" scope="col">#</th>
+          <th class="text-end" scope="col">Min C°</th>
+          <th class="text-end" scope="col">Max C°</th>
+          <th class="text-end" scope="col">Dátum</th>
+          <th class="text-end" scope="col">Típus</th>
+          <th class="text-end" colspan="2" scope="col">Műveletek</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <!-- Dinamikus feltöltés -->
+      </tbody>
+</table>
+  
+  
 <hr>   

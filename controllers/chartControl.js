@@ -1,5 +1,5 @@
 async function InitChart(theme) {
-  // Define your dark and light theme configurations
+  // Theme configurations
   const darkTheme = {
     backgroundColor: "#212529",
     fontColor: "#FFFFFF",
@@ -22,23 +22,24 @@ async function InitChart(theme) {
     markerColorMax: "#FF6347"
   };
 
-  // Define your data points
-  let dataPoints = [
-    { label: "Monday", y: [15, 26], name: "rainy" },
-    { label: "Tuesday", y: [15, 27], name: "rainy" },
-    { label: "Wednesday", y: [13, 27], name: "sunny" },
-    { label: "Thursday", y: [14, 27], name: "sunny" },
-    { label: "Friday", y: [15, 26], name: "cloudy" },
-    { label: "Saturday", y: [17, 26], name: "sunny" },
-    { label: "Sunday", y: [16, 27], name: "rainy" }
-  ];
+  // Fetch weather data
+  let data = await getWeatherData();
+  data.sort((a,b) => new Date(a.date) - new Date(b.date))
 
-  // Add x value (CanvasJS needs it for position)
-  dataPoints = dataPoints.map((dp, i) => ({ ...dp, x: i }));
+  // Format dataPoints
+  let dataPoints = data.map((wdata, i) => ({
+    label: wdata.date,
+    y: [Number(wdata.minmax[0]), Number(wdata.minmax[1])],
+    name: wdata.name,
+    x: i
+  }));
 
-  // Function to render the chart
+  // Store chart reference for global access (e.g. in resize handler)
+  let chart;
+
+  // Render chart
   function renderChart(currentThemeConfig) {
-    const chart = new CanvasJS.Chart("chartContainer", {
+    chart = new CanvasJS.Chart("chartContainer", {
       title: {
         text: "Weekly Weather Forecast",
         fontColor: currentThemeConfig.fontColor
@@ -87,7 +88,7 @@ async function InitChart(theme) {
           markerColor: currentThemeConfig.markerColorMin,
           dataPoints: dataPoints.map(dp => ({
             x: dp.x,
-            y: dp.y[0], // Min temp
+            y: dp.y[0],
             indexLabel: `${dp.y[0]}°`,
             indexLabelFontColor: currentThemeConfig.markerColorMin,
             indexLabelFontSize: 14,
@@ -102,7 +103,7 @@ async function InitChart(theme) {
           markerColor: currentThemeConfig.markerColorMax,
           dataPoints: dataPoints.map(dp => ({
             x: dp.x,
-            y: dp.y[1], // Max temp
+            y: dp.y[1],
             indexLabel: `${dp.y[1]}°`,
             indexLabelFontColor: currentThemeConfig.markerColorMax,
             indexLabelFontSize: 14,
@@ -113,65 +114,73 @@ async function InitChart(theme) {
     });
 
     chart.render();
-    addImages(chart); // Call the function to add images after the chart is rendered
+    addImages(chart); // Add weather icons after rendering
   }
 
-  // Call initial render with current theme
+  // Initial render
   const currentThemeConfig = theme === "dark" ? darkTheme : lightTheme;
   renderChart(currentThemeConfig);
 
-  // Add weather icons and position them correctly
+  // Add weather icons above each data point
   function addImages(chart) {
-    const images = [];
+    // Remove old icons if re-rendered
+    $(".weather-icon").remove();
 
     for (let i = 0; i < dataPoints.length; i++) {
       const name = dataPoints[i].name;
       let src = "";
 
-      // Set the correct image URL based on weather condition
-      if (name === "cloudy") {
-        src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/cloudy.png";
-      } else if (name === "rainy") {
-        src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/rainy.png";
-      } else if (name === "sunny") {
-        src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/sunny.png";
+      switch (name) {
+        case "cloudy":
+          src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/cloudy.png";
+          break;
+        case "rainy":
+          src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/rainy.png";
+          break;
+        case "sunny":
+          src = "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/sunny.png";
+          break;
+        case "storm":
+          src = "./images/storm.png";
+          break;
+        case "snowy":
+          src = "./images/snow.png";
+          break;
+        case "foggy":
+          src = "./images/foggy.png";
+          break;
       }
 
       const img = $("<img>")
         .attr("src", src)
-        .attr("class", name)
+        .attr("class", `weather-icon ${name}`)
+        .attr("data-index", i)
         .css("position", "absolute")
         .width("40px");
 
-      images.push(img);
       img.appendTo($("#chartContainer>.canvasjs-chart-container"));
-      positionImage(img, i, chart); // Position the image correctly after appending it
+      positionImage(img, i, chart);
     }
   }
 
-  // Correctly position the images on the chart based on X and Y axis values
+  // Position an image above a data point
   function positionImage(image, index, chart) {
     const imageCenter = chart.axisX[0].convertValueToPixel(dataPoints[index].x);
     const imageTop = chart.axisY[0].convertValueToPixel(chart.axisY[0].maximum);
 
     image.css({
-      left: imageCenter - 20 + "px", // Centering image horizontally
-      top: imageTop + "px"            // Positioning image vertically based on max Y value
+      left: imageCenter - 20 + "px", // center horizontally
+      top: imageTop + "px" // top edge
     });
   }
 
-  // Reposition images on window resize
-  $(window).resize(function () {
-    const counters = { cloudy: 0, rainy: 0, sunny: 0 };
-    
-    // Recalculate image positions after window resize
-    for (let i = 0; i < dataPoints.length; i++) {
-      const xPixel = chart.axisX[0].convertValueToPixel(dataPoints[i].x) - 20; // Adjust for image width
-      const name = dataPoints[i].name;
-
-      // Adjust image position based on class name (weather condition)
-      $("." + name).eq(counters[name]++).css({ left: xPixel + "px" });
-    }
+  // On resize, reposition images
+  $(window).off("resize.weatherIcons").on("resize.weatherIcons", function () {
+    $(".weather-icon").each(function () {
+      const index = parseInt($(this).attr("data-index"));
+      if (!isNaN(index)) {
+        positionImage($(this), index, chart);
+      }
+    });
   });
-
 }

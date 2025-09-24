@@ -31,3 +31,15 @@ footer{
 img{
 	pointer-events: none;
 }
+.form-floating{
+    transition: 500ms;
+}
+.btn{
+    transition: 500ms;
+}
+.btn:hover{
+    transform: scale(1.05);
+}
+.form-floating:hover{
+    transform: scale(1.05);
+}
