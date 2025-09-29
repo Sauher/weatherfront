@@ -1,6 +1,8 @@
 let theme = "light"
 let darkmodeBtn = document.getElementById("darkmodeBtn")
 let lightmodeBtn = document.getElementById("lightmodeBtn")
+let sun = document.getElementById("sun")
+let mun = document.getElementById("mun")
 let loggedOutMenu2 = document.getElementById("registeritem")
 let loggedOutMenu = document.getElementById("loginitem")
 let loggedInMenu2 = document.getElementById("inmenu2")
@@ -33,10 +35,14 @@ function setThemeBtn(theme){
     if(theme == "light"){
         lightmodeBtn.classList.add("hide")
         darkmodeBtn.classList.remove("hide")
+        sun.classList.remove("d-none")
+        mun.classList.add("d-none")
     }
     else{
         lightmodeBtn.classList.remove("hide")
         darkmodeBtn.classList.add("hide")
+        sun.classList.add("d-none")
+        mun.classList.remove("d-none")
     }
 }
 function loadTheme(){
