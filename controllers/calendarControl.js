@@ -8,8 +8,19 @@ async function getCalendarData(){
     
         for (let i = 0; i < weather.length; i++) {
             calevents.push({
-                title: "Hőfok: " +weather[i].minmax[1],
+                title: "Min. Hőfok: " +weather[i].minmax[0],
                 start: weather[i].date
+                
+            })
+            calevents.push({
+                title: "Max. Hőfok: " +weather[i].minmax[1],
+                start: weather[i].date,
+                backgroundColor:"#FF0000"
+            })
+            calevents.push({
+                title: "Típus: " + weather[i].name,
+                start: weather[i].date,
+                backgroundColor:"#000000"
             })
         }
     }
