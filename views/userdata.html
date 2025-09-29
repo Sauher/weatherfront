@@ -3,7 +3,7 @@
 <div class="row kozep">
 <div class="alert hide" id="alertDiv" role="alert"></div>
 
-<div class="col-6">
+<div class="col-12 col-lg-6">
     <div class="form-floating mb-3 ">
         <input type="text" class="form-control" id="nameField">
         <label for="nameField">Név</label>
@@ -13,9 +13,10 @@
         <input type="email" class="form-control" id="emailField">
         <label for="emailField">Email cím</label>
     </div>
+    <button class="btn btn-primary mb-3 col-5 kozep" id="loginBtn" onclick="UpdateUser()">Profil frissítése</button>
 </div>
 
-<div class="col-6">
+<div class="col-12 col-lg-6">
     <div class="form-floating mb-3">
         <input type="password" class="form-control" id="oldpassField" placeholder="Old Password">
         <label for="passField">Régi jelszó</label>
@@ -28,9 +29,10 @@
         <input type="password" class="form-control" id="confirmpassField" placeholder="Confirm Password">
         <label for="passField">Jelszó megerősítése</label>
     </div>
+    <button class="btn btn-primary mb-3 col-5 kozep" id="loginBtn" onclick="UpdatePassword()">Jelszó változtatása</button>
 </div>
-<button class="btn btn-primary mb-3 col-4 kozep" id="loginBtn" onclick="UpdateUser()">Profil frissítése</button>
-<button class="btn btn-primary mb-3 col-4 kozep" id="loginBtn" onclick="UpdatePassword()">Jelszó változtatása</button>
+
+
 </div>  
 </div>  
 <hr>    

@@ -11,8 +11,6 @@ let loggedInMenu5 = document.getElementById("inmenu5")
 
 let main = document.querySelector("main")
 
-Render('registration')
-
 darkmodeBtn.addEventListener('click', ()=>{
     saveTheme("dark")
     setTheme("dark")

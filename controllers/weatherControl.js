@@ -23,8 +23,20 @@ async function PostWeather() {
             ShowAlert("Nem adtál meg minden adatot!", "alert-danger")
             return
         }
-        if(mindegreeField > 40 || maxdegreeField < -10){
+        if(mindegreeField.value > 40 || maxdegreeField.value < -10){
             ShowAlert("Reális adatokat adj meg!", "alert-danger")
+            return
+        }
+        if(Number(mindegreeField.value) > Number(maxdegreeField.value)){
+            ShowAlert("A minimum hőfok nem lehet nagyobb mint a maximum!", "alert-danger")
+            return
+        }
+        if((dateField.value.split('-')[1] == "06" || dateField.value.split('-')[1] == "07" || dateField.value.split('-')[1] == "08") && mindegreeField.value < 10){
+            ShowAlert("A hónaphoz illő hőfokot adj meg!", "alert-danger")
+            return
+        }
+        if((dateField.value.split('-')[1] == "12" || dateField.value.split('-')[1] == "01" || dateField.value.split('-')[1] == "02") && maxdegreeField.value > 20){
+            ShowAlert("A hónaphoz illő hőfokot adj meg!", "alert-danger")
             return
         }
         weather.forEach(wdata => {
@@ -98,7 +110,6 @@ async function loadTable() {
     tbody.innerHTML = ''    
     try{
         weather = await getWeatherData()
-        weather.sort((a,b) => new Date(a.date) - new Date(b.date))
         for (let i = 0; i < weather.length; i++) {
                 let index = i
                 let td1 = document.createElement('td')
@@ -106,8 +117,9 @@ async function loadTable() {
                 let td3 = document.createElement('td')
                 let td4 = document.createElement('td')
                 let td5 = document.createElement('td')
-                let td6 = document.createElement('button')
-                let td7 = document.createElement('button')
+                let bt1 = document.createElement('button')
+                let bt2 = document.createElement('button')
+                let td6 = document.createElement('td')
 
                 let tr = document.createElement('tr')
     
@@ -115,17 +127,21 @@ async function loadTable() {
                 td3.classList.add('text-end')
                 td4.classList.add('text-end')
                 td5.classList.add('text-end')
-                td6.classList.add('text-center')
-                td7.classList.add('text-center')
-                td6.classList.add("btn")
-                td6.classList.add("btn-warning")
-                td7.classList.add("btn")
-                td7.classList.add("btn-danger")
-                td6.innerHTML = '<i class="bi bi-pencil-fill"></i>'
-                td7.innerHTML = '<i class="bi bi-trash-fill"></i>'
+                td6.classList.add("text-end")
+                bt1.classList.add("btn")
+                bt1.classList.add("btn-warning")
+                bt1.classList.add("mx-2")
+                bt2.classList.add("mx-2")
+                bt2.classList.add("btn")
+                bt2.classList.add("btn-danger") 
+                bt1.type = "button"
+                bt2.type = "button"
+                
+                bt1.innerHTML = '<i class="bi bi-pencil-fill"></i>'
+                bt2.innerHTML = '<i class="bi bi-trash-fill"></i>'
 
-                td6.setAttribute('onClick', `editWeather(${index+1})`)
-                td7.setAttribute('onClick',`Delete(${index+1})`)
+                bt1.setAttribute('onClick', `editWeather(${index+1})`)
+                bt2.setAttribute('onClick',`Delete(${index+1})`)
 
                 td1.innerHTML = ""
                 td2.innerHTML = weather[i].minmax[0] + " C°"
@@ -151,13 +167,15 @@ async function loadTable() {
                         td5.innerHTML = '<i class="bi bi-sun-fill"></i>'
                         
                 }
+            td6.appendChild(bt1)
+            td6.appendChild(bt2)
             tr.appendChild(td1)
             tr.appendChild(td2)
             tr.appendChild(td3)
             tr.appendChild(td4)
             tr.appendChild(td5)
             tr.appendChild(td6)
-            tr.appendChild(td7)
+
             tbody.appendChild(tr)
             };
             
@@ -185,32 +203,59 @@ async function Update(){
     let maxdegreeField = document.getElementById("maxdegreeField")
     let typeSelect = document.getElementById("typeSelect")
 
+    
 
+    if(typeSelect.value == '' || dateField.value == '' || mindegreeField.value == '' || maxdegreeField.value == ""){
+        ShowAlert("Nem adtál meg minden adatot!", "alert-danger")
+        return
+    }
+    if(mindegreeField.value > 40 || maxdegreeField.value < -10){
+        ShowAlert("Reális adatokat adj meg!", "alert-danger")
+        return
+    }
+    if(Number(mindegreeField.value) > Number(maxdegreeField.value)){
+        ShowAlert("A minimum hőfok nem lehet nagyobb mint a maximum!", "alert-danger")
+        return
+    }
+    if((dateField.value.split('-')[1] == "06" || dateField.value.split('-')[1] == "07" || dateField.value.split('-')[1] == "08") && mindegreeField.value < 10){
+        ShowAlert("A hónaphoz illő hőfokot adj meg!", "alert-danger")
+        return
+    }
+    if((dateField.value.split('-')[1] == "12" || dateField.value.split('-')[1] == "01" || dateField.value.split('-')[1] == "02") && maxdegreeField.value > 20){
+        ShowAlert("A hónaphoz illő hőfokot adj meg!", "alert-danger")
+        return
+    }
     if(selectedWeather.date == dateField.value){
-        const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: selectedWeather.id,
-                name: typeSelect.value,
-                minmax: [mindegreeField.value,maxdegreeField.value],
-                date: dateField.value
-            })
-            })
-            const data = await res.json()
-            if (res.status == 200){
-                typeSelect.value = ''
-                dateField.value = ''
-                mindegreeField.value = ''
-                maxdegreeField.value = ''
-                ShowAlert("Sikeres adatfrissítés!", "alert-success")
-                await loadTable()
-            }
-            else{
-                ShowAlert("Hiba az adatok frissítése során!", 'alert-danger')
-            }
+        try{
+            const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: selectedWeather.id,
+                    name: typeSelect.value,
+                    minmax: [mindegreeField.value,maxdegreeField.value],
+                    date: dateField.value
+                })
+                })
+                const data = await res.json()
+                if (res.status == 200){
+                    typeSelect.value = ''
+                    dateField.value = ''
+                    mindegreeField.value = ''
+                    maxdegreeField.value = ''
+                    ShowAlert("Sikeres adatfrissítés!", "alert-success")
+                    await loadTable()
+                }
+                else{
+                    ShowAlert("Hiba az adatok frissítése során!", 'alert-danger')
+                }
+        }
+        catch (err){
+            console.log('Hiba!' + err)
+        }
+        
     }
     else{
         
@@ -309,6 +354,7 @@ async function Update(){
             console.log(err)
         }
     }
+    Cancel()
 }
 
 async function editWeather(index){
@@ -316,7 +362,6 @@ async function editWeather(index){
     let mindegreeField = document.getElementById("mindegreeField")
     let maxdegreeField = document.getElementById("maxdegreeField")
     let typeSelect = document.getElementById("typeSelect")
-
     toggleEditMode(true)
     dateField.value = weather[index-1].date
     mindegreeField.value = weather[index-1].minmax[0]

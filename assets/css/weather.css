@@ -31,6 +31,9 @@ footer{
 img{
 	pointer-events: none;
 }
+.nav-link{
+    transition: 500ms;
+}
 .form-floating{
     transition: 500ms;
 }
@@ -40,6 +43,16 @@ img{
 .btn:hover{
     transform: scale(1.05);
 }
+
+.nav-link:hover{
+    transform: scale(1.05);
+    font-weight: bolder;
+    cursor: pointer;
+}
 .form-floating:hover{
     transform: scale(1.05);
+}
+.row{
+
+    padding: 3%;
 }
