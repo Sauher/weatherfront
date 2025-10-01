@@ -111,7 +111,6 @@ async function loadTable() {
     try{
         weather = await getWeatherData()
         for (let i = 0; i < weather.length; i++) {
-                let index = i
                 let td1 = document.createElement('td')
                 let td2 = document.createElement('td')
                 let td3 = document.createElement('td')
@@ -140,8 +139,8 @@ async function loadTable() {
                 bt1.innerHTML = '<i class="bi bi-pencil-fill"></i>'
                 bt2.innerHTML = '<i class="bi bi-trash-fill"></i>'
 
-                bt1.setAttribute('onClick', `editWeather(${index+1})`)
-                bt2.setAttribute('onClick',`Delete(${index+1})`)
+                bt1.setAttribute('onClick', `editWeather(${weather[i].id})`)
+                bt2.setAttribute('onClick',`Delete(${weather[i].id})`)
 
                 td1.innerHTML = ""
                 td2.innerHTML = weather[i].minmax[0] + " C°"
@@ -184,7 +183,7 @@ async function loadTable() {
         console.log('Hiba!', err)
     }
 }
-async function getWeatherData(){
+async function getWeatherData(){ 
     const res = await fetch(`${API}/weather`)
     const data = await res.json()
     if(res.status == 200){
