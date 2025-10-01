@@ -111,6 +111,7 @@ async function loadTable() {
     try{
         weather = await getWeatherData()
         for (let i = 0; i < weather.length; i++) {
+            let index = i 
                 let td1 = document.createElement('td')
                 let td2 = document.createElement('td')
                 let td3 = document.createElement('td')
@@ -139,7 +140,7 @@ async function loadTable() {
                 bt1.innerHTML = '<i class="bi bi-pencil-fill"></i>'
                 bt2.innerHTML = '<i class="bi bi-trash-fill"></i>'
 
-                bt1.setAttribute('onClick', `editWeather(${weather[i].id})`)
+                bt1.setAttribute('onClick', `editWeather(${index+1})`)
                 bt2.setAttribute('onClick',`Delete(${weather[i].id})`)
 
                 td1.innerHTML = ""
@@ -297,6 +298,31 @@ async function Update(){
         }
         else{
             try{
+                const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                   
+                    })
+                    let data = await res.json()
+                    if (res.status == 200){
+                        typeSelect.value = ''
+                        dateField.value = ''
+                        mindegreeField.value = ''
+                        maxdegreeField.value = ''
+                        Cancel()
+                        await loadTable()
+                    }
+                    else{
+                        ShowAlert("Hupika2",'alert-danger')
+                    }
+            }
+            catch(err){
+                ShowAlert("Hupika1",'alert-danger')
+                console.log(err)
+            }
+            try{
             const res = await fetch(`${API}/weather/${weatherid}`, {
                 method: 'PATCH',
                 headers: {
@@ -327,31 +353,7 @@ async function Update(){
                 console.log(err)
             }
         }
-        try{
-            const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-               
-                })
-                let data = await res.json()
-                if (res.status == 200){
-                    typeSelect.value = ''
-                    dateField.value = ''
-                    mindegreeField.value = ''
-                    maxdegreeField.value = ''
-                    Cancel()
-                    await loadTable()
-                }
-                else{
-                    ShowAlert("Hupika2",'alert-danger')
-                }
-        }
-        catch(err){
-            ShowAlert("Hupika1",'alert-danger')
-            console.log(err)
-        }
+        
     }
     Cancel()
 }
