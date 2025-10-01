@@ -8,6 +8,18 @@ header{
 .subtitle{
     font-style: italic;
 }
+#darkmodeBtn{
+    transition: 500ms;
+}
+#lightmodeBtn{
+    transition: 500ms;
+}
+#darkmodeBtn:hover{
+    font-size: 25px;
+}
+#lightmodeBtn:hover{
+    font-size: 25px;
+}
 #themebtns{
     position: absolute;
     top:0;

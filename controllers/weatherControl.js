@@ -286,10 +286,24 @@ async function Update(){
                         mindegreeField.value = ''
                         maxdegreeField.value = ''
                         ShowAlert("Sikeres adatfrissítés!", "alert-success")
-                        await loadTable()
+
                     }
                     else{
                         ShowAlert("Hiba az adatok küldése során!", 'alert-danger')
+                    }
+                    try{
+                        const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                           
+                            })
+                            await loadTable()
+                    }
+                    catch(err){
+                        ShowAlert("Hupika1",'alert-danger')
+                        console.log(err)
                     }
             }
             catch(err){
@@ -298,6 +312,7 @@ async function Update(){
         }
         else{
             try{
+               
                 const res = await fetch(`${API}/weather/${selectedWeather.id}`, {
                     method: 'DELETE',
                     headers: {
@@ -305,25 +320,18 @@ async function Update(){
                     }
                    
                     })
-                    let data = await res.json()
-                    if (res.status == 200){
-                        typeSelect.value = ''
-                        dateField.value = ''
-                        mindegreeField.value = ''
-                        maxdegreeField.value = ''
-                        Cancel()
-                        await loadTable()
-                    }
-                    else{
-                        ShowAlert("Hupika2",'alert-danger')
-                    }
             }
             catch(err){
                 ShowAlert("Hupika1",'alert-danger')
                 console.log(err)
             }
             try{
-            const res = await fetch(`${API}/weather/${weatherid}`, {
+                weather.forEach(wdata => {
+                    if(wdata.date == dateField.value){
+                        weatherid = wdata.id
+                    }
+                })
+                const res = await fetch(`${API}/weather/${weatherid}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
